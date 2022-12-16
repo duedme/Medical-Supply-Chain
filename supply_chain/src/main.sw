@@ -1,28 +1,57 @@
 contract;
 
+dep data_structures;
 
-/// @notice Se guarda el estado actual de una medicina.
-/// Datos generales.
-struct Medicina_estado {
-    caducidad: u8,
-    numero_de_lote: u8,
-    estado_correcto: bool,
-}
-
-/// @notice Registro de qué partes ya colaboraron al suministro.
-/// Cada estado guarda un estado de medicina.
-struct Suministro {
-    fabricacion: Option<Medicina_estado>,
-    distribucion: Option<Medicina_estado>,
-    entrega: Option<Medicina_estado>,
-    utilizacion: Option<Medicina_estado>,
-}
+use data_structures::{Suministro, Medicina_estado};
 
 storage {
     suministro: Suministro = Suministro { 
-        fabricacion: Null,
-        distribucion: Null,
-        entrega: Null,
-        utilizacion: Null,
-        },
+        fabricacion: Option::None,
+        distribucion: Option::None,
+        entrega: Option::None,
+        utilizacion: Option::None,
+        }
+}
+
+impl Suministro {
+    #[storage(write)]
+    fn agregar_estado_en_fabricacion(estado: Medicina_estado) {
+        storage.suministro.fabricacion = Option::Some(estado);
+    }
+
+    #[storage(write)]
+    fn agregar_estado_en_distribucion(estado: Medicina_estado) {
+        storage.suministro.distribucion = Option::Some(estado);
+    }
+
+    #[storage(write)]
+    fn agregar_estado_en_entrega(estado: Medicina_estado) {
+        storage.suministro.entrega = Option::Some(estado);
+    }
+
+    #[storage(write)]
+    fn agregar_estado_en_utilizacion(caducidad: u8, numero_de_lote: u8, buen_estado: bool, empaque_seguro: bool) {
+        storage.suministro.utilizacion = Option::Some(Medicina_estado::new_estado(
+            caducidad: u8,
+            numero_de_lote: u8,
+            buen_estado: bool,
+            empaque_seguro: bool
+        ))
+    }
+}
+
+impl Medicina_estado {
+    fn new_estado(
+        caducidad: u8,
+        numero_de_lote: u8,
+        buen_estado: bool,
+        empaque_seguro: bool,
+    ) -> Medicina_estado {
+        Medicina_estado {
+            caducidad,
+            numero_de_lote,
+            buen_estado,
+            empaque_seguro,
+        }
+    }
 }
