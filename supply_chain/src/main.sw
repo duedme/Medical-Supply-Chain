@@ -18,7 +18,9 @@ use data_structures::{Suministro,
 /// @notice Se inicializan todas las etapas del suministro a None (aún no ha empezado la distribucion).
 /// @notice Se guardarán las direcciones de todos los elementos que intervinieron en la distribución.   
 /// @notice Se guardará cada número de lote de medicinas.
-/// @notice Se alojan también los 
+/// @notice Se alojan también las medicinas utilizadas.
+/// @notice A registrar los pacientes tratados con la medicina.
+/// @notice Se toman en cuenta las direcciones de los entes por los que pasó el supply chain.
 storage {
     suministro: Suministro = Suministro {
         fabricacion: Option::None,
@@ -98,6 +100,7 @@ impl Suministro_constructor for Contract {
     }
 }*/
 
+/// @notice Toda la información en storage para read_only.
 impl Leer_informacion for Contract {
     #[storage(read)]
     fn sum() -> Suministro {
@@ -165,6 +168,7 @@ impl Leer_informacion for Contract {
     }
 }
 
+/// @notice Se registran las direcciones de los entes encargados de cada etapa de suministro.
 impl Asignar_id_etapas_de_suministro for Contract {
     #[storage(write)]
     fn asignar_id_fabricacion(addr: b256) {
@@ -187,6 +191,9 @@ impl Asignar_id_etapas_de_suministro for Contract {
     }
 }
 
+/// @notice Con la primera función se registra en el contrato el número de lote de las medicinas.
+/// @notice Con la segunda función se registra en cada medicina el número de lote en el contrato y
+///     un identificador especial.
 impl Asignar_id_usuario_paciente_y_medicina for Contract {
     #[storage(read, write)]   
     fn asignar_numero_de_lote() {
