@@ -28,7 +28,9 @@ storage {
 
     numero_de_lote: u8 = 0,
 
-    medicinad_en_lote: Option<StorageVec<Medicina>> = Option::None,
+    medicinas_segun_paciente: StorageVec<Medicina> = StorageVec{},
+
+    paciente_aplicado: StorageVec<Paciente> = StorageVec{},
 
     id_fabricacion: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000,
     id_distribucion: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000,
@@ -91,6 +93,11 @@ impl Leer_informacion for Contract {
     #[storage(read)]
     fn sum() -> Suministro {
         storage.suministro
+    }
+
+    #[storage(read)]
+    fn obtener_medicina(identificador_paciente: u8) -> Medicina {
+        storage.paciente_aplicado.medicina_aplicada
     }
 
    #[storage(read)]
@@ -177,8 +184,15 @@ impl Asignar_id_usuario_paciente_y_medicina for Contract {
         storage.numero_de_lote = storage.numero_de_lote + 1
     }
 
-    #[storage(write)]
-    fn asignar_unidad_en_lote(max_number_of_units: u8) -> u8 {
-
+    #[storage(read, write)]
+    fn asignar_unidad_en_lote(max_number_of_units: u8) {
+        for i in 0..max_number_of_units {
+            storage.medicinas_en_lote.push(
+                Medicina {
+                    numero_de_lote: storage.numero_de_lote,,
+                    unidad_aplicada: i,
+                }
+            );
+        }
     }
 }

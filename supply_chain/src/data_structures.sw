@@ -58,6 +58,9 @@ abi Leer_informacion {
     fn sum() -> Suministro;
 
     #[storage(read)]
+    fn obtener_medicina() -> Medicina;
+
+    #[storage(read)]
     fn obtener_estado_fabrica() -> Medicina_estado;
     
     #[storage(read)]
@@ -109,8 +112,8 @@ abi Asignar_id_usuario_paciente_y_medicina {
     #[storage(read, write)]   
     fn asignar_numero_de_lote();
 
-    #[storage(write)]
-    fn asignar_unidad_en_lote(max_number_of_units: u8) -> u8;
+    #[storage(read, write)]
+    fn asignar_unidad_en_lote(max_number_of_units: u8);
 }
 
 abi Reiniciar_contrato {
