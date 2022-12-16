@@ -58,7 +58,7 @@ abi Leer_informacion {
     fn sum() -> Suministro;
 
     #[storage(read)]
-    fn obtener_medicina() -> Medicina;
+    fn obtener_medicina(identificador_paciente: u8) -> Medicina;
 
     #[storage(read)]
     fn obtener_estado_fabrica() -> Medicina_estado;

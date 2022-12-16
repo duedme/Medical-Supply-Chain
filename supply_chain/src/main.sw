@@ -6,6 +6,7 @@ use std::storage::StorageVec;
 
 use data_structures::{Suministro,
     Suministro_constructor,
+    Paciente,
     Medicina,
     Medicina_estado,
     Medicina_estado_constructor,
@@ -42,42 +43,50 @@ storage {
 impl Suministro_constructor for Contract {
     #[storage(write)]
     fn agregar_estado_en_fabricacion(caducidad: u8, buen_estado: bool, empaque_seguro: bool) {
-        storage.suministro.fabricacion = Option::Some(new_estado(
-            caducidad,
-            buen_estado,
-            empaque_seguro
-        ));
+        storage.suministro.fabricacion = Option::Some(
+            Medicina_estado {
+                caducidad,
+                buen_estado,
+                empaque_seguro,
+            }
+        );
     }
 
     #[storage(write)]
     fn agregar_estado_en_distribucion(caducidad: u8, buen_estado: bool, empaque_seguro: bool) {
-        storage.suministro.distribucion = Option::Some(new_estado(
-            caducidad,
-            buen_estado,
-            empaque_seguro
-        ));
+        storage.suministro.distribucion = Option::Some(
+            Medicina_estado {
+                caducidad,
+                buen_estado,
+                empaque_seguro,
+            }
+        );
     }
 
     #[storage(write)]
     fn agregar_estado_en_entrega(caducidad: u8, buen_estado: bool, empaque_seguro: bool) {
-        storage.suministro.entrega = Option::Some(new_estado(
-            caducidad,
-            buen_estado,
-            empaque_seguro
-        ));
+        storage.suministro.entrega = Option::Some(
+            Medicina_estado {
+                caducidad,
+                buen_estado,
+                empaque_seguro,
+            }
+        );
     }
 
     #[storage(write)]
     fn agregar_estado_en_utilizacion(caducidad: u8, buen_estado: bool, empaque_seguro: bool) {
-        storage.suministro.utilizacion = Option::Some(new_estado(
-            caducidad,
-            buen_estado,
-            empaque_seguro
-        ));
+        storage.suministro.utilizacion = Option::Some(
+            Medicina_estado {
+                caducidad,
+                buen_estado,
+                empaque_seguro,
+            }
+        );
     }
 }
 
-impl Medicina_estado_constructor for Contract {
+/*impl Medicina_estado_constructor for Contract {
     fn new_estado(caducidad: u8, buen_estado: bool, empaque_seguro: bool,
     ) -> Medicina_estado {
         
@@ -87,7 +96,7 @@ impl Medicina_estado_constructor for Contract {
             empaque_seguro,
         }
     }
-}
+}*/
 
 impl Leer_informacion for Contract {
     #[storage(read)]
@@ -97,7 +106,7 @@ impl Leer_informacion for Contract {
 
     #[storage(read)]
     fn obtener_medicina(identificador_paciente: u8) -> Medicina {
-        storage.paciente_aplicado.medicina_aplicada
+        storage.paciente_aplicado.get(identificador_paciente).unwrap().medicina_aplicada
     }
 
    #[storage(read)]
@@ -186,13 +195,16 @@ impl Asignar_id_usuario_paciente_y_medicina for Contract {
 
     #[storage(read, write)]
     fn asignar_unidad_en_lote(max_number_of_units: u8) {
-        for i in 0..max_number_of_units {
-            storage.medicinas_en_lote.push(
+        let mut i = 0;
+        while i < max_number_of_units {
+            storage.medicinas_segun_paciente.push(
                 Medicina {
-                    numero_de_lote: storage.numero_de_lote,,
+                    numero_de_lote: storage.numero_de_lote,
                     unidad_aplicada: i,
                 }
             );
+
+            i += 1;
         }
     }
 }
