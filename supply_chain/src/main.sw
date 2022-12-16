@@ -88,18 +88,6 @@ impl Suministro_constructor for Contract {
     }
 }
 
-/*impl Medicina_estado_constructor for Contract {
-    fn new_estado(caducidad: u8, buen_estado: bool, empaque_seguro: bool,
-    ) -> Medicina_estado {
-        
-        Medicina_estado {
-            caducidad,
-            buen_estado,
-            empaque_seguro,
-        }
-    }
-}*/
-
 /// @notice Toda la información en storage para read_only.
 impl Leer_informacion for Contract {
     #[storage(read)]
